@@ -1,0 +1,30 @@
+version: "3.7"
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: blog-api
+    container_name: blog-api
+    stdin_open: true
+    command: /usr/src/app/node_modules/.bin/nodemon server.js
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongo
+    env_file: .env
+    environment:
+      - NODE_ENV=development
+    # environment:
+    #   - MONGO_HOSTNAME=$MONGO_HOSTNAME
+    #   - MONGO_PORT=$MONGO_PORT
+    #   - MONGO_DB=$MONGO_DB
+  mongo:
+    image: mongo
+    container_name: blog-mongo
+    ports:
+      - "27017:27017"
